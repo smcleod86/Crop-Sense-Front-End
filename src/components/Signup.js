@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import axios from 'axios';
 import { Redirect } from 'react-router-dom'
 
-export default function Signup() {
+const Signup = () => {
     let [name, setName] = useState('')
-    let [email, setEmail] = setState('')
+    let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
-    let [passsword2, setPassword2] = useState('')
-    let [redirect, setRedirect] = setRedirect(false)
+    let [password2, setPassword2] = useState('')
+    let [redirect, setRedirect] = useState(false)
 
     let handleName = (e) => {
         setName(e.target.value)
@@ -26,35 +26,32 @@ export default function Signup() {
     }
 
     let handleSubmit = (e) => {
-        e.preventDefault()
-        // check if both passwords are the same
+        e.preventDefault();
         if (password === password2) {
-            const newUser = {
-                name: name,
-                email: email, 
-                password: password
+        const newUser = {
+            name: name,
+            email: email,
+            password: password,
         }
 
-        axios.post(`${process.env.REACT_APP_API}/api/users/register`, newUser)
-            .then(res => {
-                // redirect user to Login
-                setRedirect(true)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/users/register`, newUser)
+            // .then(res => console.log(res.data))
+        .then(res => {
+        setRedirect(true)
+        })
+        .catch(err => console.log(err));
+        }
     }
-}
 
-if (redirect) return <Redirect to='/login' />
+    if (redirect) return <Redirect to="/login" />
 
 
-    return (
+        return (
         <div className="row mt-4">
-        <div className="col-md-7 offset-md-3">
-            <div className="card card-body">
-                <h2 className="py-2">Signup</h2>
-                <form action="/ideas" method="post" onSubmit={handleSubmit}>
+            <div className="col-md-7 offset-md-3">
+                <div className="card card-body">
+                    <h2 className="py-2">Signup</h2>
+                    <form action="/ideas" method="post" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
                         <input type="text" name="name" value={name} onChange={handleName} className="form-control" />
@@ -72,9 +69,11 @@ if (redirect) return <Redirect to='/login' />
                         <input type="password" name="password2" value={password2} onChange={handlePassword2} className="form-control" />
                     </div>
                     <button type="submit" className="btn btn-primary float-right">Submit</button>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
         </div>
     )
 }
+
+export default Signup;
